@@ -37,6 +37,13 @@ def mark_completed(task):
         save_tasks(completed_file, st.session_state.completed)
         st.rerun()  # Refresh UI
 
+def delete_task(task):
+    """Deletes a task from the tasks list."""
+    if task in st.session_state.tasks:
+        st.session_state.tasks.remove(task)
+        save_tasks(tasks_file, st.session_state.tasks)
+        st.rerun()  # Refresh UI
+
 def main():
     st.title("To-Do List")
 
@@ -70,14 +77,16 @@ def main():
         add_task()
         st.rerun()  # Refresh UI
 
-    # Display tasks with checkboxes
+    # Display tasks with checkboxes and delete
     if st.session_state.tasks:
         st.write("### Current Tasks:")
-        for task in st.session_state.tasks:
-            col1, col2 = st.columns([0.8, 0.2])
+        for index, task in enumerate(st.session_state.tasks):
+            col1, col2, col3 = st.columns([0.7, 0.2, 0.1])
             col1.write(task)
-            if col2.checkbox("✔", key=task):
+            if col2.checkbox("✅", key=f"checkbox_{task}"):
                 mark_completed(task)
+            if col3.button("❌", key=f"delete_{task}_{index}"):
+                delete_task(task)
     else:
         st.write("No tasks added yet.")
 
