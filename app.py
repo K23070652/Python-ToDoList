@@ -47,19 +47,87 @@ def delete_task(task):
 def main():
     st.title("To-Do List")
 
-    # Set background image
+    
     st.markdown(
         """
         <style>
         .stApp {
-            background-image: url("https://images.pexels.com/photos/956999/milky-way-starry-sky-night-sky-star-956999.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2");
+            background-image: url("https://images.pexels.com/photos/2387793/pexels-photo-2387793.jpeg?cs=srgb&dl=pexels-adrien-olichon-2387793.jpg&fm=jpg");
             background-attachment: fixed;
             background-size: cover;
+            color: white;
+        }
+
+        .header {
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .task-list {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            margin: 5px 0;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            font-size: 18px;
+        }
+
+        .task-item button, .task-item checkbox {
+            background-color: #ff4b5c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 10px 0;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+        }
+
+        .footer a {
+            color: #ff4b5c;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
         }
         </style>
-        """,
-        unsafe_allow_html=True
+        """, unsafe_allow_html=True
     )
+
+    st.markdown(
+        """
+        <div class="footer">
+            <p>Made by <a href="https://github.com/K23070652">Manav Sukheja</a></p>
+        </div>
+        """, unsafe_allow_html=True
+    )
+
 
     # Initialize session state variables
     if "tasks" not in st.session_state:
@@ -79,14 +147,16 @@ def main():
 
     # Display tasks with checkboxes and delete
     if st.session_state.tasks:
+        st.markdown("<div class='task-list'>", unsafe_allow_html=True)
         st.write("### Current Tasks:")
         for index, task in enumerate(st.session_state.tasks):
             col1, col2, col3 = st.columns([0.7, 0.2, 0.1])
-            col1.write(task)
+            col1.markdown(f"<div class='task-item'>{task}</div>", unsafe_allow_html=True)
             if col2.checkbox("✅", key=f"checkbox_{task}"):
                 mark_completed(task)
             if col3.button("❌", key=f"delete_{task}_{index}"):
                 delete_task(task)
+        st.markdown("</div>", unsafe_allow_html=True)
     else:
         st.write("No tasks added yet.")
 
@@ -94,7 +164,7 @@ def main():
     if st.session_state.completed:
         st.write("### Completed Tasks ✅")
         for task in st.session_state.completed:
-            st.write(f"✔ {task}")
+            st.write(f"✅ {task}")
 
     # Button to clear all tasks
     if st.button("Clear all tasks"):
