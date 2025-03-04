@@ -1,6 +1,6 @@
 # Python-ToDoList App
 
-This is a personal project of mine where I have made a simple To-Do List App using Python and Streamlit. The app allows users to add new tasks, mark them as complete, and clear the entire task list. Each task is stored in a CSV file as it is added.
+This is a personal project of mine where I have made a simple To-Do List App using Python and Streamlit. The app allows users to add new tasks, delete tasks, mark them as complete, and clear the entire task list. Each task is stored in a CSV file as it is added. Each completed task is added to a new CSV file.
 
 ## Usage
 To use the To-Do List application, you can follow these steps:
