@@ -19,6 +19,14 @@ def save_tasks(task_list):
         writer = csv.writer(f)
         writer.writerows([[task] for task in task_list])
 
+def add_task():
+    """Handles adding a task."""
+    task = st.session_state["new_task"].strip()
+    if task:  # Prevent empty tasks
+        st.session_state.tasks.append(task)
+        save_tasks(st.session_state.tasks)
+        st.session_state["new_task"] = ""  # Reset input field
+
 def main():
     st.title("To-Do List")
 
@@ -36,32 +44,30 @@ def main():
         unsafe_allow_html=True
     )
 
-    # Initialize task list in session state
+    # Initialize session state variables
     if "tasks" not in st.session_state:
         st.session_state.tasks = load_tasks()
 
     # Input new tasks
-    task_input = st.text_input("Add a new task:")
-    
+    st.text_input("Add a new task:", key="new_task", on_change=add_task)
+
+    # Button to add task
     if st.button("Add"):
-        if task_input.strip():  # Prevent empty tasks
-            st.session_state.tasks.append(task_input)
-            save_tasks(st.session_state.tasks)  # Save updated tasks
-            st.rerun()  # Refresh the UI to show new tasks
+        add_task()
+        st.rerun()  # Refresh UI
 
     # Display tasks
     if st.session_state.tasks:
         st.write("Current tasks:")
         for i, task in enumerate(st.session_state.tasks):
             st.write(f"{i+1}. {task}")
-
     else:
         st.write("No tasks added yet.")
 
     # Button to clear all tasks
     if st.button("Clear all tasks"):
         st.session_state.tasks.clear()
-        save_tasks(st.session_state.tasks)  # Save changes
+        save_tasks(st.session_state.tasks)
         st.rerun()  # Refresh UI
 
 if __name__ == "__main__":
